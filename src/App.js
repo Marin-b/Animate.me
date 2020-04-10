@@ -1,25 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import { Provider } from 'react-redux'
+import { Navigation, Frames, Menu } from './containers'
+
+import store from './store'
+import './App.css'
 
 function App() {
+  const [height, setHeight] = useState(window.innerHeight)
+  useEffect(() => {
+    window.addEventListener('resize', () => setHeight(window.innerHeight))
+    document.body.addEventListener('touchmove', (e) => e.preventDefault() , { passive: false })
+  })
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <div id="app" style={{height: `${height}px`, width: '100vw'}}>
+        <div id="main">
+          <Menu />
+          <Frames />
+        </div>
+        <Navigation />
+      </div>
+    </Provider>
   );
 }
 
