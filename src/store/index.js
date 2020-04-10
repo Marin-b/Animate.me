@@ -1,11 +1,11 @@
 import { createStore, combineReducers } from 'redux'
 import framesReducer from './frames'
-import frameReducer from './frame'
+import  toolsReducer from './tools'
 
 
 const reducers = combineReducers({
-  frameReducer,
-  framesReducer
+  framesReducer,
+  toolsReducer
 })
 
 const store = createStore(reducers)

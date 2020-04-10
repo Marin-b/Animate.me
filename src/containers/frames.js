@@ -36,10 +36,17 @@ const Frames = (props) => {
   return (
     <div id="frames" ref={container}>
       <Frame background content={background} saveContent={saveBackground} height={height}/>
+      { currentFrame !== undefined && currentFrame > 0 && <Frame
+          key={currentFrame - 1}
+          content={frames[currentFrame - 1]}
+          height={height}
+          opacity={0.4}
+         /> }
       { currentFrame !== undefined && <Frame
           key={currentFrame}
           content={frames[currentFrame]}
           height={height}
+          opacity={1}
           saveContent={(content) => { saveFrame(currentFrame, content) }}/> }
     </div>
   )

@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
+import { connect } from 'react-redux'
+import { getColor, getLineWidth } from "../store/tools"
 
 const Frame = (props) => {
   const [drawing, setDrawing] = useState(false);
@@ -6,6 +8,8 @@ const Frame = (props) => {
   const [X, setX] = useState(undefined)
   const [Y, setY] = useState(undefined)
   const canvas = useRef(null)
+
+  const { lineWidth, color } = props
 
   useEffect(() => {
     console.log('useeffect', canvas.current)
@@ -18,7 +22,9 @@ const Frame = (props) => {
       };
       img.src = props.content;
     }
-    setTimeout( () => {props.saveContent(canvas.current.toDataURL())}, 100)
+    if (props.saveContent) {
+      setTimeout( () => {props.saveContent(canvas.current.toDataURL())}, 100)
+    }
   }, [])
 
   const getPenPos = (canvas, clientX, clientY) => {
@@ -70,7 +76,9 @@ const Frame = (props) => {
     ctx.beginPath();
     ctx.moveTo(X, Y);
     ctx.lineTo(drawX , drawY );
-    ctx.lineWidth=3;
+    ctx.lineWidth = lineWidth;
+    ctx.strokeStyle = color;
+    ctx.lineCap = 'round';
     ctx.stroke();
     setX(drawX)
     setY(drawY)
@@ -78,7 +86,7 @@ const Frame = (props) => {
   }
 
   return(
-    <div className={props.background ? "frame background" : "frame"} style={{height: `${props.height}px`}}>
+    <div className={props.background ? "frame background" : "frame"} style={{height: `${props.height}px`, opacity: props.opacity ? props.opacity : 1}}>
       <canvas
         ref={canvas}
         onMouseMove={handleMouseMove}
@@ -94,4 +102,9 @@ const Frame = (props) => {
   )
 }
 
-export default Frame
+const mapStateToProps = (state) => ({
+  color: getColor(state),
+  lineWidth: getLineWidth(state)
+})
+
+export default connect(mapStateToProps)(Frame)

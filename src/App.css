@@ -10,6 +10,9 @@
 
 #menu{
   height: 10vh;
+  display: flex;
+  background-color: white;
+  border-bottom: 2px solid black;
 }
 body,
 html {
@@ -23,6 +26,11 @@ html {
   position: relative;
 }
 
+#drawing-tools{
+  display: flex;
+  align-items: center;
+}
+
 #actions{
   flex-grow: 1;
   display: flex;
@@ -33,6 +41,11 @@ html {
   background-color: #FF9B71;
   color: white;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  font-weight: bolder;
 }
 
 .frame {
@@ -101,4 +114,39 @@ html {
 
 .miniature.selected{
   border: 2px solid #FF9B71;
+}
+
+.color-container{
+  position: relative;
+}
+
+#picker-dropdown{
+  position: absolute;
+  top: 8vh;
+  left: 0;
+  z-index: 1000;
+}
+
+.line-width-container{
+  border-radius: 50%;
+  margin-left: 2vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  border: 1px solid #FF9B71;
+}
+
+#slider-dropdown{
+  position: absolute;
+  top: 8vh;
+  width: 100%;
+  text-align: center;
+  z-index: 1000;
+  height: 10vh;
+}
+
+.line-width{
+  background-color: black;
+  border-radius: 50%;
 }
