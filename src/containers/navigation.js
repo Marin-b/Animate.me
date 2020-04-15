@@ -86,7 +86,12 @@ const Navigation = (props) => {
             <i className="fas fa-chevron-left fa-2x"></i>
           </div>
           <div className="frames-container" ref={framesContainer}>
-            {frames.map((frame, i) => <Miniature key={i} content={frame} selected={currentFrame === i} clickEvent={() => {goToFrame(i)}}/>)}
+            {frames.map((frame, i) => (
+              <div style={{position: 'relative'}}>
+                <Miniature key={i} content={frame} selected={currentFrame === i} clickEvent={() => {goToFrame(i)}} />
+                {frame && <div style={{position: 'absolute', bottom: '10px', right: '20px'}}> {i + 1} </div>}
+              </div>
+            ))}
           </div>
           <div className="scroll-actions" onMouseDown={initScrollRight} onMouseUp={stopScroll} onTouchStart={initScrollRight} onTouchEnd={stopScroll}>
             <i className="fas fa-chevron-right fa-2x"></i>

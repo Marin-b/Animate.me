@@ -9,7 +9,11 @@
 }
 
 #menu{
-  height: 10vh;
+  height: 90px;
+  display: flex;
+  padding: 10px;
+  background-color: white;
+  border-bottom: 2px solid #364f6b;
 }
 body,
 html {
@@ -21,6 +25,14 @@ html {
   height: 80vh;
   min-height: 80vh;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#drawing-tools{
+  display: flex;
+  align-items: center;
 }
 
 #actions{
@@ -33,6 +45,11 @@ html {
   background-color: #FF9B71;
   color: white;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  font-weight: bolder;
 }
 
 .frame {
@@ -101,4 +118,44 @@ html {
 
 .miniature.selected{
   border: 2px solid #FF9B71;
+}
+
+.color-container{
+  position: relative;
+}
+
+#picker-dropdown{
+  position: absolute;
+  top: 8vh;
+  left: 0;
+  z-index: 1000;
+}
+
+.line-width-container{
+  border-radius: 50%;
+  margin-left: 2vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  border: 1px solid #FF9B71;
+}
+
+#slider-dropdown{
+  position: absolute;
+  top: 8vh;
+  width: 100%;
+  text-align: center;
+  z-index: 1000;
+  height: 15vh;
+}
+
+.line-width{
+  background-color: black;
+  border-radius: 50%;
+}
+.canvas{
+  max-height: 100%;
+  max-width: 100%;
+  margin: 0 auto;
 }

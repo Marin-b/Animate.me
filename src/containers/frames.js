@@ -19,27 +19,20 @@ const Frames = (props) => {
           saveBackground
         } = props
 
-  const [height, setHeight] = useState()
   const container = useRef(null)
-
-  const setCanvasHeight = () => {
-    console.log(window.window.orientation)
-    console.log(container.current.offsetHeight)
-    setHeight(container.current.offsetHeight)
-  }
-
-  useEffect(() => {
-    window.addEventListener('resize', setCanvasHeight);
-    setCanvasHeight()
-  }, [])
 
   return (
     <div id="frames" ref={container}>
-      <Frame background content={background} saveContent={saveBackground} height={height}/>
+      <Frame background content={background} saveContent={saveBackground} />
+      { currentFrame !== undefined && currentFrame > 0 && <Frame
+          key={currentFrame - 1}
+          content={frames[currentFrame - 1]}
+          opacity={0.4}
+         /> }
       { currentFrame !== undefined && <Frame
           key={currentFrame}
           content={frames[currentFrame]}
-          height={height}
+          opacity={1}
           saveContent={(content) => { saveFrame(currentFrame, content) }}/> }
     </div>
   )

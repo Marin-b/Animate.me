@@ -1,4 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
+import { connect } from 'react-redux'
+import { getColor, getLineWidth } from "../store/tools"
+import { getFormat } from "../store/format"
 
 const Frame = (props) => {
   const [drawing, setDrawing] = useState(false);
@@ -7,18 +10,21 @@ const Frame = (props) => {
   const [Y, setY] = useState(undefined)
   const canvas = useRef(null)
 
+  const { lineWidth, color, format } = props
+
   useEffect(() => {
-    console.log('useeffect', canvas.current)
     const newCtx = canvas.current.getContext('2d')
     setCtx(newCtx)
+
     if (props.content) {
       var img = new Image;
       img.onload = function(){
         newCtx.drawImage(img,0,0);
       };
       img.src = props.content;
+    } else if (props.saveContent) {
+      setTimeout(() => {props.saveContent(canvas.current.toDataURL())}, 100)
     }
-    setTimeout( () => {props.saveContent(canvas.current.toDataURL())}, 100)
   }, [])
 
   const getPenPos = (canvas, clientX, clientY) => {
@@ -70,7 +76,9 @@ const Frame = (props) => {
     ctx.beginPath();
     ctx.moveTo(X, Y);
     ctx.lineTo(drawX , drawY );
-    ctx.lineWidth=3;
+    ctx.lineWidth = lineWidth;
+    ctx.strokeStyle = color;
+    ctx.lineCap = 'round';
     ctx.stroke();
     setX(drawX)
     setY(drawY)
@@ -78,8 +86,9 @@ const Frame = (props) => {
   }
 
   return(
-    <div className={props.background ? "frame background" : "frame"} style={{height: `${props.height}px`}}>
       <canvas
+        className={props.background ? "canvas frame background" : "canvas frame"}
+        style={{ opacity: props.opacity ? props.opacity : 1 }}
         ref={canvas}
         onMouseMove={handleMouseMove}
         onMouseDown={handleMouseDown}
@@ -87,11 +96,16 @@ const Frame = (props) => {
         onTouchMove={handleTouchMove}
         onTouchStart={handleTouchStart}
         onTouchEnd={endDrawing}
-        height={`${props.height}px`}
-        width={`${window.innerWidth}px`}
+        height={format.height}
+        width={format.width}
       />
-    </div>
   )
 }
 
-export default Frame
+const mapStateToProps = (state) => ({
+  color: getColor(state),
+  lineWidth: getLineWidth(state),
+  format: getFormat(state)
+})
+
+export default connect(mapStateToProps)(Frame)

@@ -1,0 +1,30 @@
+
+.submenu{
+  display:flex;
+  justify-content: space-between;
+  flex-direction: column;
+  border-left: 1px solid rgba(0,0,0,0.8);
+  padding: 0px 10px;
+}
+
+.submenu-actions{
+  display: flex;
+  justify-content: space-between;
+  align-items: center
+}
+
+.submenu-header{
+  opacity: 0.7;
+  font-size: 15px;
+}
+
+.submenu:first-child{
+  border-left: none;
+}
+
+.submenu-el{
+  height: 40px;
+  margin-right: 20px;
+  display: flex;
+  align-items: center;
+}
