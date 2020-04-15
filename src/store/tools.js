@@ -1,6 +1,9 @@
 const initialState = {
   color: 'red',
-  lineWidth: 40
+  lineWidth: 40,
+  mode: 'draw',
+  undoStack: [],
+  redoStack: []
 }
 
 //=================================

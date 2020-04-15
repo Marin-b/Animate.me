@@ -9,10 +9,11 @@
 }
 
 #menu{
-  height: 10vh;
+  height: 90px;
   display: flex;
+  padding: 10px;
   background-color: white;
-  border-bottom: 2px solid black;
+  border-bottom: 2px solid #364f6b;
 }
 body,
 html {
@@ -24,6 +25,9 @@ html {
   height: 80vh;
   min-height: 80vh;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #drawing-tools{
@@ -143,10 +147,15 @@ html {
   width: 100%;
   text-align: center;
   z-index: 1000;
-  height: 10vh;
+  height: 15vh;
 }
 
 .line-width{
   background-color: black;
   border-radius: 50%;
+}
+.canvas{
+  max-height: 100%;
+  max-width: 100%;
+  margin: 0 auto;
 }
