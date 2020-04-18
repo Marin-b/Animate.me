@@ -1,0 +1,13 @@
+
+
+<div class="container">
+  <h1>
+    Create animation
+  </h1>
+  <%= simple_form_for @animation do |f| %>
+    <%= f.input :title %>
+    <%= f.input :format, collection: ['1280x720'], include_blank: false %>
+    <%= f.submit %>
+  <% end %>
+</div>
+
