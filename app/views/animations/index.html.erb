@@ -1,0 +1,9 @@
+<h1>Your animations</h1>
+
+<% @animations.each do |anim| %>
+  <%= link_to animation_path(anim) do %>
+    <%= anim.title %>
+  <% end %>
+<% end %>
+
+<%= link_to "create animation", new_animation_path %>
