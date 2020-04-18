@@ -41,7 +41,7 @@ const CanvasTools = (props) => {
             </div>
           }
         </div>
-        <i class="fas fa-eraser" style={{fontSize: '40px', color: mode === 'erase' ? '#FF9B71' : 'black'}} onClick={() => {
+        <i className="fas fa-eraser" style={{fontSize: '40px', color: mode === 'erase' ? '#FF9B71' : 'black'}} onClick={() => {
           console.log('seeting to', mode === 'erase' ? 'draw' : 'erase')
           setMode(mode === 'erase' ? 'draw' : 'erase')
         }}></i>

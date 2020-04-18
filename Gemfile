@@ -17,6 +17,8 @@ gem 'uglifier'
 gem 'webpacker'
 gem 'cloudinary'
 gem "mini_magick"
+gem 'streamio-ffmpeg'
+gem "mini_magick"
 
 
 group :development do

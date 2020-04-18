@@ -25,6 +25,12 @@ class AnimationsController < ApplicationController
     end
   end
 
+  def export
+    @animation = Animation.find(params[:id])
+    animation_exporter = AnimationExporter.new(@animation, 2)
+    send_file animation_exporter.run
+  end
+
   private
 
   def strong_params

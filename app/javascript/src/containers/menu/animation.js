@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux"
-import { getFrames, getCurrentFrame, goToFrame } from "../../store/frames"
+import { getFrames, getCurrentFrame, goToFrame, getAnimationId } from "../../store/frames"
 import { getPlaying, getFps, setFps, play, stop } from "../../store/animation"
 
 const Animation = (props) => {
@@ -12,7 +12,8 @@ const Animation = (props) => {
     setFps,
     play,
     stop,
-    playing
+    playing,
+    animationId
   } = props
 
 
@@ -41,6 +42,9 @@ const Animation = (props) => {
       <div className="submenu-actions">
         <input type="number" onChange={(e) => setFps(e.target.value)} defaultValue={fps}/>
         <i className={playing ? "fas fa-pause-circle" : "fas fa-play-circle"} style={{fontSize: '40px', color: '#FF9B71'}} onClick={toggleAnimation}></i>
+        <a href={`/animations/${animationId}/export`} download>
+          <i className="fas fa-download" style={{fontSize: '40px', color: '#FF9B71'}}></i>
+        </a>
       </div>
     </div>
   )
@@ -57,7 +61,8 @@ const mapStateToProps = state => ({
   frames: getFrames(state),
   currentFrame: getCurrentFrame(state),
   playing: getPlaying(state),
-  fps: getFps(state)
+  fps: getFps(state),
+  animationId: getAnimationId(state)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Animation)
