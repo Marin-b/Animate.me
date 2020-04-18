@@ -15,7 +15,7 @@ amazon:
   service: S3
   access_key_id: <%= ENV['AWS_ACCESS'] %>
   secret_access_key: <%= ENV['AWS_SECRET'] %>
-  region: us-east-1
+  region: eu-west-3
   bucket: animate.me
 
 # Remember not to checkin your GCS keyfile to a repository
