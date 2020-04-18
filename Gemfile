@@ -19,7 +19,7 @@ gem 'cloudinary'
 gem "mini_magick"
 gem 'streamio-ffmpeg'
 gem "mini_magick"
-
+gem "aws-sdk-s3"
 
 group :development do
   gem 'web-console', '>= 3.3.0'
