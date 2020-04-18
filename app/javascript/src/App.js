@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Navigation, Frames, Menu } from './containers'
 
 import { initialize } from './store/frames'
-import './App.css'
+
 
 const App = (props) => {
   const [height, setHeight] = useState(window.innerHeight)

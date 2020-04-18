@@ -11,8 +11,14 @@
 // Your CSS partials
 @import "components/index";
 @import "pages/index";
-
+@import "react/index";
 
 body{
-  margin: 0
+  margin: 0;
 }
+
+
+*{
+  box-sizing: border-box;
+}
+
