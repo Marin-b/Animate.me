@@ -37,20 +37,14 @@ class AnimationExporter
   end
 
   def create_mp4
-    slideshow_transcoder = FFMPEG::Transcoder.new(
-      '',
-      @tmp_dir + "/#{@animation.title}.mp4",
-      { resolution: @animation.format },
-      input: @tmp_dir + "/frame_%03d.png",
-      input_options: { framerate: @fps.to_s }
-    )
-
-    slideshow = slideshow_transcoder.run
+    @output_filename = @tmp_dir + "/#{@animation.title}.mp4"
+    cmd = "ffmpeg -framerate 8 -i #{@tmp_dir}/frame_%03d.png -c:v libx264 -vf format=yuv420p #{@output_filename}"
+    system cmd
+    @output_filename
   end
 
   def run
     create_image_sequence
     create_mp4
-    return @tmp_dir + "/#{@animation.title}.mp4"
   end
 end
