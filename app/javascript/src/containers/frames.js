@@ -26,7 +26,7 @@ const Frames = (props) => {
 
   return (
     <div id="frames" ref={container}>
-      <Frame background key={`background-${background.id}`} frame={background} saveContent={saveBackground} uploadFrame={uploadFrame} editing={!playing} />
+      { background.id && <Frame background key={`background-${background.id}`} frame={background} saveContent={saveBackground} uploadFrame={uploadFrame} editing={!playing} />}
       { currentFrame !== undefined && currentFrame && !playing > 0 && <Frame
           key={`backlayer-${frames[currentFrame - 1].id}`}
           frame={frames[currentFrame - 1]}

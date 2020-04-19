@@ -15,7 +15,7 @@ const App = (props) => {
       initialData[key] = JSON.parse(initialData[key])
     });
     props.initialize(initialData)
-  })
+  }, [])
 
   return (
     <div id="app" style={{height: `${height}px`, width: '100vw'}}>

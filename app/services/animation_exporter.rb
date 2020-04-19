@@ -5,16 +5,16 @@ class AnimationExporter
     @animation = animation
     @fps = fps
     @tmp_dir = "#{Rails.root}/tmp/animation_#{@animation.id}"
-    if Dir.exists?(@tmp_dir)
-      FileUtils.rm_rf(@tmp_dir)
-    end
+    FileUtils.rm_rf(@tmp_dir) if Dir.exist?(@tmp_dir)
     Dir.mkdir @tmp_dir
   end
 
   def combine_with_background(index)
     frame  = MiniMagick::Image.new(@tmp_dir + "/temp_#{index}.png")
 
-    result = @background_img.composite(frame)
+    result = @background_img.composite(frame) do |c|
+      c.background 'White'
+    end
     result.write @tmp_dir + "/frame_#{index.to_s.rjust(3, "0")}.png"
   end
 
@@ -22,7 +22,14 @@ class AnimationExporter
     File.open(@tmp_dir + "/background.png", "wb") do |file|
       file.write(@animation.background.content.download)
     end
-    @background_img = MiniMagick::Image.new(@tmp_dir + "/background.png")
+    MiniMagick::Tool::Convert.new do |convert|
+      convert << @tmp_dir + "/background.png"
+      convert.background 'White'
+      convert.flatten
+      convert << @tmp_dir + "/background_white.png"
+    end
+    @background_img = MiniMagick::Image.new(@tmp_dir + "/background_white.png")
+
   end
 
   def create_image_sequence
@@ -37,7 +44,7 @@ class AnimationExporter
   end
 
   def create_mp4
-    @output_filename = @tmp_dir + "/#{@animation.title}.mp4"
+    @output_filename = @tmp_dir + "/#{@animation.title.gsub(' ', '_')}.mp4"
     cmd = "ffmpeg -framerate 8 -i #{@tmp_dir}/frame_%03d.png -c:v libx264 -vf format=yuv420p #{@output_filename}"
     system cmd
     @output_filename
