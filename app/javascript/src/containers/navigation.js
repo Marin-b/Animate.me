@@ -8,9 +8,10 @@ import { getFrames,
          goToFrame
        } from '../store/frames'
 import { getPlaying } from '../store/animation'
+
 const Navigation = (props) => {
     const {
-          currentFrame,
+          currentFrameId,
           background,
           newFrame,
           goToFrame,
@@ -77,19 +78,19 @@ const Navigation = (props) => {
   }
 
 
-  const miniatureClick = (frameIndex) => {
+  const miniatureClick = (frameId) => {
     if (!playing) {
-      goToFrame(frameIndex)
+      goToFrame(frameId)
     }
   }
 
   return(
      <div id="actions">
         <div id="background-container">
-          <div style={{position: 'relative'}} key={background.id}>
-            <Miniature content={background.content} clickEvent={() => {miniatureClick(undefined)}} selected={currentFrame === undefined}/>
-            <div style={{position: 'absolute', bottom: '5px', right: 'calc(1vh + 5px)'}}>Background</div>
-          </div>
+         { background &&  <div style={{position: 'relative'}}>
+             <Miniature content={background.content} clickEvent={() => {miniatureClick(background.id)}} selected={currentFrameId === background.id}/>
+             <div style={{position: 'absolute', bottom: '5px', right: 'calc(1vh + 5px)'}}>Background</div>
+           </div>}
         </div>
         <div id="frames-wrapper" >
           <div className="scroll-actions" onMouseDown={initScrollLeft} onMouseUp={stopScroll} onTouchStart={initScrollLeft} onTouchEnd={stopScroll}>
@@ -98,7 +99,7 @@ const Navigation = (props) => {
           <div className="frames-container" ref={framesContainer}>
             {frames.map((frame, i) => (
               <div style={{position: 'relative'}} key={frame.id}>
-                <Miniature  content={frame.content} selected={currentFrame === i} clickEvent={() => {miniatureClick(i)}} />
+                <Miniature  content={frame.content} selected={currentFrameId === frame.id} clickEvent={() => {miniatureClick(frame.id)}} />
                 {frame && <div style={{position: 'absolute', bottom: '5px', right: 'calc(1vh + 5px)'}}> {i + 1} </div>}
               </div>
             ))}
@@ -116,7 +117,7 @@ const Navigation = (props) => {
 
 const mapStateToProps = (state) => ({
   frames: getFrames(state),
-  currentFrame: getCurrentFrame(state),
+  currentFrameId: getCurrentFrame(state),
   background: getBackground(state),
   playing: getPlaying(state)
 })

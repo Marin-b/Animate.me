@@ -45,7 +45,7 @@ class AnimationExporter
 
   def create_mp4
     @output_filename = @tmp_dir + "/#{@animation.title.gsub(' ', '_')}.mp4"
-    cmd = "ffmpeg -framerate 8 -i #{@tmp_dir}/frame_%03d.png -c:v libx264 -vf format=yuv420p #{@output_filename}"
+    cmd = "ffmpeg -framerate #{@fps} -i #{@tmp_dir}/frame_%03d.png -c:v libx264 -vf format=yuv420p #{@output_filename}"
     system cmd
     @output_filename
   end

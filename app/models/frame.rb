@@ -8,7 +8,7 @@ class Frame < ApplicationRecord
   before_create :set_order
 
   def set_order
-    self.order = animation.frames.count * 10 unless self.order
+    self.order = animation.frames.order(:order).last.order + 10 unless self.order
   end
 
   def purge_content

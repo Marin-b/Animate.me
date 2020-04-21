@@ -16,22 +16,40 @@ const Animation = (props) => {
     animationId
   } = props
 
+  const [exporting, setExporting] = useState(false)
 
   useEffect(() => {
     if (playing) {
-      setTimeout(() => {goToFrame(nextFrame())}, 1000/fps)
+      setTimeout(() => {goToFrame(nextFrameId())}, 1000/fps)
     }
   }, [props.currentFrame])
 
-  const nextFrame = () => currentFrame === frames.length - 1 ? 0 : currentFrame + 1
+  const nextFrameId = () => {
+    const frame = frames.find(f => f.id === currentFrame)
+    const nextIndex = frames.indexOf(frame) + 1
+    return frames[nextIndex > frames.length - 1 ? 0 : nextIndex].id
+  }
 
   const toggleAnimation = () => {
     if (playing) {
       stop()
     } else {
       play()
-      currentFrame ? goToFrame(nextFrame()) : goToFrame(0)
+      currentFrame ? goToFrame(nextFrameId()) : goToFrame(0)
     }
+  }
+
+  const canExport = () => {
+    if (exporting) {
+      return false
+    }
+    const frame = frames.find(f => f.id === currentFrame)
+    return frame ? frame.saved : true
+  }
+
+  const exportStarted = () => {
+    setExporting(true)
+    setTimeout(() => {setExporting(false)}, 4000)
   }
 
   return(
@@ -40,11 +58,11 @@ const Animation = (props) => {
         Animation
       </div>
       <div className="submenu-actions">
-        <input type="number" onChange={(e) => setFps(e.target.value)} defaultValue={fps}/>
-        <i className={playing ? "fas fa-pause-circle" : "fas fa-play-circle"} style={{fontSize: '40px', color: '#FF9B71'}} onClick={toggleAnimation}></i>
-        <a href={`/animations/${animationId}/export`} download>
-          <i className="fas fa-download" style={{fontSize: '40px', color: '#FF9B71'}}></i>
+        <input type="number" className="submenu-el" style={{fontSize: '12px', width: '50px', textAlign: 'center'}} onChange={(e) => setFps(e.target.value)} defaultValue={fps}/>
+        <a href={`/animations/${animationId}/export?fps=${fps}`} onClick={exportStarted} className={canExport() ? "submenu-el" : "submenu-el disabled"} download>
+          <i className="fas fa-download submenu-el"></i>
         </a>
+        <i className={playing ? "fas fa-pause-circle submenu-el" : "fas fa-play-circle submenu-el"} style={{ color: '#FF9B71' }} onClick={toggleAnimation}></i>
       </div>
     </div>
   )

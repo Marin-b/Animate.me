@@ -23,8 +23,16 @@
 }
 
 .submenu-el{
-  height: 40px;
+  height: 30px;
+  width: 30px;
+  font-size: 30px;
   margin-right: 20px;
   display: flex;
   align-items: center;
+  color: #333333;
+}
+
+.submenu-el.disabled{
+  opacity: 0.5;
+  pointer-events: none;
 }

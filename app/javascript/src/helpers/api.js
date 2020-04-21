@@ -24,3 +24,16 @@ export const patchApi = async(url, body = {}, headers = {}) => {
       body: JSON.stringify(body)
   })
 }
+
+export const deleteApi = async(url, body = {}, headers = {}) => {
+  return fetch(url, {
+      method: 'DELETE',
+      credentials: 'same-origin',
+      headers: {
+        ...headers,
+        'content-type': 'application/json',
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      },
+      body: JSON.stringify(body)
+  })
+}
