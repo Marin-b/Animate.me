@@ -45,10 +45,11 @@ const Frames = (props) => {
 
   return (
     <div id="frames" ref={container}>
-      { background && <Frame background key="background" frame={background} saveContent={ (content) => changeFrame(background.id, content)} uploadFrame={uploadFrame} editing={!playing && background.id === currentFrameId} />}
-      { showOverlay && overlay && <Frame key={`overlay-${overlay.id}`} frame={overlay} opacity={0.5} editing={false} />}
+      { background && <Frame background key="background" id="canvas-background" frame={background} saveContent={ (content) => changeFrame(background.id, content)} uploadFrame={uploadFrame} editing={!playing && background.id === currentFrameId} />}
+      { showOverlay && overlay && <Frame key={`overlay-${overlay.id}`} id="canvas-overlay" frame={overlay} opacity={0.5} editing={false} />}
       { currentFrame !== undefined && <Frame
           uploadFrame={uploadFrame}
+          id="canvas-drawing"
           key={`canvas-${currentFrame.id}`}
           frame={currentFrame}
           opacity={1}

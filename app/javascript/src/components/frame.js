@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import { connect } from 'react-redux'
-import { getColor, getLineWidth, getMode } from "../store/tools"
+import { getColor, getLineWidth, getMode, setColor, setMode } from "../store/tools"
 import { getFormat } from "../store/format"
+
+const CANVASIDS = ["drawing", "overlay", "background"]
 
 const Frame = (props) => {
   const [drawing, setDrawing] = useState(false);
@@ -10,7 +12,7 @@ const Frame = (props) => {
   const [Y, setY] = useState(undefined)
   const canvas = useRef(null)
 
-  const { lineWidth, color, format, uploadFrame, editing, mode } = props
+  const { lineWidth, color, format, uploadFrame, editing, mode, setColor, setMode } = props
 
   const loadContent = (ctx) => {
     var img = new Image;
@@ -56,7 +58,40 @@ const Frame = (props) => {
   }
 
   const handleMouseDown = (e) => {
-    startDrawing(e.clientX, e.clientY)
+    switch(mode) {
+      case 'draw':
+        ctx.globalCompositeOperation = 'source-over'
+        startDrawing(e.clientX, e.clientY)
+        break
+      case 'erase':
+        ctx.globalCompositeOperation = 'destination-out'
+        startDrawing(e.clientX, e.clientY)
+        break
+      case 'picker':
+        setColor(pickColor(e, 0))
+        setMode('draw')
+        break
+      default:
+         return
+    }
+
+  }
+
+  const pickColor = (e, canvasIndex) => {
+    if (canvasIndex >= CANVASIDS.length) {
+      return 'white'
+    }
+    const canv = document.querySelector(`#canvas-${CANVASIDS[canvasIndex]}`)
+    if (!canv) {
+      return pickColor(e, canvasIndex + 1)
+    }
+    const { x, y } = getPenPos(canvas, e.clientX, e.clientY)
+    const colorData = canv.getContext('2d').getImageData(x, y, 1, 1).data
+    if (colorData[3] == 0) {
+      return pickColor(e, canvasIndex + 1)
+    } else {
+      return `rgba(${colorData[0]}, ${colorData[1]}, ${colorData[2]}, ${colorData[3]})`
+    }
   }
 
   const handleTouchStart = (e) => {
@@ -71,27 +106,29 @@ const Frame = (props) => {
     const { x, y } = getPenPos(canvas, clientX, clientY)
     setX(x)
     setY(y)
-    ctx.globalCompositeOperation = mode === 'draw' ? 'source-over' : 'destination-out'
     ctx.beginPath();
     ctx.arc(x, y, lineWidth / 2, 0, 2 * Math.PI)
+    ctx.fillStyle = color;
     ctx.fill()
     ctx.beginPath()
   }
 
   const endDrawing = () => {
-    setDrawing(false)
-    props.saveContent(canvas.current.toDataURL())
+    if (drawing) {
+      setDrawing(false)
+      props.saveContent(canvas.current.toDataURL())
+    }
   }
 
   const handleMouseMove = (e) => {
-    if(drawing) {
+    if (drawing) {
       const { x, y } = getPenPos(canvas, e.clientX, e.clientY)
       draw(x, y)
     }
   }
 
   const handleTouchMove = (e) => {
-    if(drawing) {
+    if (drawing) {
       const { x, y } = getPenPos(canvas, e.touches[0].clientX, e.touches[0].clientY)
       draw(x, y)
     }
@@ -110,12 +147,14 @@ const Frame = (props) => {
 
   return(
       <canvas
+        id={props.id}
         className={props.background ? "canvas frame background" : "canvas frame"}
         style={{ opacity: props.opacity ? props.opacity : 1 }}
         ref={canvas}
         onMouseMove={handleMouseMove}
         onMouseDown={handleMouseDown}
         onMouseUp={endDrawing}
+        onMouseLeave={endDrawing}
         onTouchMove={handleTouchMove}
         onTouchStart={handleTouchStart}
         onTouchEnd={endDrawing}
@@ -132,4 +171,8 @@ const mapStateToProps = (state) => ({
   mode: getMode(state)
 })
 
-export default connect(mapStateToProps)(Frame)
+const mapDispatchToProps = {
+  setColor,
+  setMode
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Frame)
