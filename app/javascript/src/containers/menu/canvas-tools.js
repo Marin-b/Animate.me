@@ -47,6 +47,7 @@ const CanvasTools = (props) => {
           console.log('seeting to', mode === 'erase' ? 'draw' : 'erase')
           setMode(mode === 'erase' ? 'draw' : 'erase')
         }}></i>
+        <i className="fas fa-eye-dropper submenu-el" onClick={() => {setMode('picker')}} style={{color: mode === 'picker' ? '#FF9B71' : 'black'}}></i>
         <i className="far fa-clone submenu-el" style={{color: overlay ? '#FF9B71' : 'black'}} onClick={() => setOverlay(!overlay)}></i>
       </div>
     </div>
