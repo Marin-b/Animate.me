@@ -11,7 +11,7 @@
 }
 
 #menu{
-  height: 90px;
+  height: 80px;
   display: flex;
   padding: 10px;
   background-color: white;
@@ -135,12 +135,11 @@ html {
 
 .line-width-container{
   border-radius: 50%;
-  margin-left: 2vh;
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
-  border: 1px solid #FF9B71;
+  border: 1px solid #333333;
 }
 
 #slider-dropdown{

@@ -27,21 +27,22 @@ const Frame = (props) => {
     if (props.frame.content) {
       loadContent(newCtx)
     } else if (props.saveContent) {
+      // set content after the creation of frame
       setTimeout(() => {props.saveContent(canvas.current.toDataURL())}, 100)
     }
 
-    if (editing) {
-      const uploadInterval = setInterval(() => {
+    return () => {
+      if (!props.frame.saved) {
         uploadFrame(props.frame.id)
-      }, 20000)
-      return () => {
-        uploadFrame(props.frame.id)
-        clearInterval(uploadInterval)
       }
     }
-
   }, [])
 
+  useEffect( () => {
+    if (!props.editing && !props.frame.saved && props.uploadFrame) {
+      uploadFrame(props.frame.id)
+    }
+  }, [props.editing])
 
   const getPenPos = (canvas, clientX, clientY) => {
    var rect = canvas.current.getBoundingClientRect(), // abs. size of element
@@ -63,10 +64,18 @@ const Frame = (props) => {
   }
 
   const startDrawing = (clientX, clientY) => {
+    if (!editing) {
+      return
+    }
     setDrawing(true)
     const { x, y } = getPenPos(canvas, clientX, clientY)
     setX(x)
     setY(y)
+    ctx.globalCompositeOperation = mode === 'draw' ? 'source-over' : 'destination-out'
+    ctx.beginPath();
+    ctx.arc(x, y, lineWidth / 2, 0, 2 * Math.PI)
+    ctx.fill()
+    ctx.beginPath()
   }
 
   const endDrawing = () => {
@@ -77,35 +86,22 @@ const Frame = (props) => {
   const handleMouseMove = (e) => {
     if(drawing) {
       const { x, y } = getPenPos(canvas, e.clientX, e.clientY)
-      mode === 'draw' ? draw(x, y) : erase(x, y)
+      draw(x, y)
     }
   }
 
   const handleTouchMove = (e) => {
-     if(drawing) {
+    if(drawing) {
       const { x, y } = getPenPos(canvas, e.touches[0].clientX, e.touches[0].clientY)
-      mode === 'draw' ? draw(x, y) : erase(x, y)
+      draw(x, y)
     }
   }
 
   const draw = (drawX, drawY) => {
-    ctx.beginPath();
-    ctx.globalCompositeOperation = 'source-over';
     ctx.moveTo(X, Y);
     ctx.lineTo(drawX , drawY );
     ctx.lineWidth = lineWidth;
     ctx.strokeStyle = color;
-    ctx.lineCap = 'round';
-    ctx.stroke();
-    setX(drawX)
-    setY(drawY)
-  }
-
-  const erase = (drawX, drawY) => {
-    ctx.globalCompositeOperation = 'destination-out';
-    ctx.moveTo(X, Y);
-    ctx.lineTo(drawX , drawY );
-    ctx.lineWidth = lineWidth;
     ctx.lineCap = 'round';
     ctx.stroke();
     setX(drawX)

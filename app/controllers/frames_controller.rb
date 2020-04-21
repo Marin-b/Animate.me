@@ -18,6 +18,12 @@ class FramesController < ApplicationController
     render json: @frame.to_json
   end
 
+  def destroy
+    @frame = Frame.find(params[:id])
+    @frame.destroy
+    render json: @frame.to_json
+  end
+
   private
 
   def set_animation

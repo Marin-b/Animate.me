@@ -4,7 +4,7 @@ class AnimationsController < ApplicationController
   layout 'draw', only: :show
   def show
     @animation = Animation.find(params[:id])
-    @frames = @animation.frames.order(:order).map { |f| { id: f.id, content: f.base_64_content, order: f.order } }
+    @frames = @animation.frames.order(:order).to_a.push(@animation.background).map { |f| { id: f.id, content: f.base_64_content, order: f.order } }
   end
 
   def index
@@ -27,7 +27,7 @@ class AnimationsController < ApplicationController
 
   def export
     @animation = Animation.find(params[:id])
-    animation_exporter = AnimationExporter.new(@animation, 2)
+    animation_exporter = AnimationExporter.new(@animation, params[:fps]&.to_i)
     send_file animation_exporter.run
   end
 
