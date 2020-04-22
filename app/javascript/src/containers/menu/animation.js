@@ -62,7 +62,7 @@ const Animation = (props) => {
         <a href={`/animations/${animationId}/export?fps=${fps}`} onClick={exportStarted} className={canExport() ? "submenu-el" : "submenu-el disabled"} download>
           <i className="fas fa-download submenu-el"></i>
         </a>
-        <i className={playing ? "fas fa-pause-circle submenu-el" : "fas fa-play-circle submenu-el"} style={{ color: '#FF9B71' }} onClick={toggleAnimation}></i>
+        <i className={playing ? "fas fa-pause-circle submenu-el" : "fas fa-play-circle submenu-el"} style={{ color: '#FF9B71' }} onTouch={toggleAnimation} onClick={toggleAnimation}></i>
       </div>
     </div>
   )
