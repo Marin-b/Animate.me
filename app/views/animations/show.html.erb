@@ -1,4 +1,5 @@
 <div id="animation-data" data-frames="<%= @frames.to_json  %>" data-animationId="<%= @animation.id %>" data-background="<%= @animation.background.id %>"
 ></div>
+<div id="format-data" data-width="<%= @animation.format.split('x')[0] %>" data-height="<%= @animation.format.split('x')[1] %>"></div>
 <div id="root">
 </div>

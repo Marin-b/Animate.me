@@ -49,7 +49,7 @@ const Animation = (props) => {
 
   const exportStarted = () => {
     setExporting(true)
-    setTimeout(() => {setExporting(false)}, 4000)
+    setTimeout(() => {setExporting(false)}, frames.length * 1500)
   }
 
   return(

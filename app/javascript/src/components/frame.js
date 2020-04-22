@@ -6,7 +6,9 @@ import { getFormat } from "../store/format"
 const CANVASIDS = ["drawing", "overlay", "background"]
 
 const Frame = (props) => {
-  const [drawing, setDrawing] = useState(false);
+  const [action, setAction] = useState(false);
+  const [distanceDrawn, setDistanceDrawn] = useState(0)
+  const [brushLineWidth, setBrushLineWidth] = useState(0)
   const [ctx, setCtx] = useState(undefined)
   const [X, setX] = useState(undefined)
   const [Y, setY] = useState(undefined)
@@ -58,51 +60,58 @@ const Frame = (props) => {
   }
 
   const handleMouseDown = (e) => {
-    switch(mode) {
+    pointerStart(e.clientX, e.clientY)
+  }
+
+  const pointerStart = (clientX, clientY) => {
+     switch(mode) {
       case 'draw':
         ctx.globalCompositeOperation = 'source-over'
-        startDrawing(e.clientX, e.clientY)
+        startDrawing(clientX, clientY)
         break
       case 'erase':
         ctx.globalCompositeOperation = 'destination-out'
-        startDrawing(e.clientX, e.clientY)
+        startDrawing(clientX, clientY)
+        break
+      case 'brush':
+        ctx.globalCompositeOperation = 'source-over'
+        setBrushLineWidth(lineWidth)
+        startDrawing(clientX, clientY)
         break
       case 'picker':
-        setColor(pickColor(e, 0))
+        setColor(pickColor(clientX, clientY, 0))
         setMode('draw')
         break
       default:
          return
     }
-
   }
-
-  const pickColor = (e, canvasIndex) => {
+  const pickColor = (clientX, clientY, canvasIndex) => {
     if (canvasIndex >= CANVASIDS.length) {
       return 'white'
     }
     const canv = document.querySelector(`#canvas-${CANVASIDS[canvasIndex]}`)
     if (!canv) {
-      return pickColor(e, canvasIndex + 1)
+      return pickColor(clientX, clientY, canvasIndex + 1)
     }
-    const { x, y } = getPenPos(canvas, e.clientX, e.clientY)
+    const { x, y } = getPenPos(canvas, clientX, clientY)
     const colorData = canv.getContext('2d').getImageData(x, y, 1, 1).data
     if (colorData[3] == 0) {
-      return pickColor(e, canvasIndex + 1)
+      return pickColor(clientX, clientY, canvasIndex + 1)
     } else {
       return `rgba(${colorData[0]}, ${colorData[1]}, ${colorData[2]}, ${colorData[3]})`
     }
   }
 
   const handleTouchStart = (e) => {
-    startDrawing(e.touches[0].clientX, e.touches[0].clientY)
+    pointerStart(e.touches[0].clientX, e.touches[0].clientY)
   }
 
   const startDrawing = (clientX, clientY) => {
     if (!editing) {
       return
     }
-    setDrawing(true)
+    setAction(mode)
     const { x, y } = getPenPos(canvas, clientX, clientY)
     setX(x)
     setY(y)
@@ -114,33 +123,56 @@ const Frame = (props) => {
   }
 
   const endDrawing = () => {
-    if (drawing) {
-      setDrawing(false)
+    if (action) {
+      setAction(undefined)
+      setDistanceDrawn(0)
       props.saveContent(canvas.current.toDataURL())
     }
   }
 
   const handleMouseMove = (e) => {
-    if (drawing) {
-      const { x, y } = getPenPos(canvas, e.clientX, e.clientY)
+    const { x, y } = getPenPos(canvas, e.clientX, e.clientY)
+    if (action) {
       draw(x, y)
     }
   }
 
   const handleTouchMove = (e) => {
-    if (drawing) {
-      console.log(e)
-      const { x, y } = getPenPos(canvas, e.touches[0].clientX, e.touches[0].clientY)
+    const { x, y } = getPenPos(canvas, e.touches[0].clientX, e.touches[0].clientY)
+    if (action === 'draw') {
       draw(x, y)
+    } else if (action === 'brush') {
+      console.log(e.touches[0].force)
+      brush(x, y,  e.touches[0].force)
     }
   }
 
-  const draw = (drawX, drawY) => {
+  const brush = (drawX, drawY, force) => {
+    ctx.beginPath()
+    const flw = (lineWidth * force) * 10 // 100
+    setBrushLineWidth(brushLineWidth < flw ? brushLineWidth + flw / 20 : brushLineWidth - flw / 20)
+    //const newDist = distanceDrawn + dist
+    //setDistanceDrawn(newDist)
+    //flw *= newDist > 100 ? 10 : (newDist / 100) * 10
     ctx.moveTo(X, Y);
-    ctx.lineTo(drawX , drawY );
-    ctx.lineWidth = lineWidth;
+    ctx.lineTo(drawX, drawY );
+    ctx.lineWidth = brushLineWidth
     ctx.strokeStyle = color;
     ctx.lineCap = 'round';
+    ctx.lineJoin = 'round'
+    ctx.stroke();
+    setX(drawX)
+    setY(drawY)
+  }
+
+  const draw = (drawX, drawY) => {
+    ctx.beginPath()
+    ctx.moveTo(X, Y);
+    ctx.lineTo(drawX, drawY );
+    ctx.lineWidth = lineWidth
+    ctx.strokeStyle = color;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round'
     ctx.stroke();
     setX(drawX)
     setY(drawY)

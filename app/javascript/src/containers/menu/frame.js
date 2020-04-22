@@ -1,9 +1,10 @@
 import React from "react";
 import { connect } from "react-redux"
 import { uploadFrame, getCurrentFrame, getFrames, getBackground, destroyFrame } from "../../store/frames"
+import { getPlaying } from '../../store/animation'
 
 const Frame = (props) => {
-  const {uploadFrame, currentFrameId, frames, background, destroyFrame} = props
+  const {uploadFrame, currentFrameId, frames, background, destroyFrame, playing} = props
 
   const isCurrentFrameSaved = () => {
     const currentFrame = frames.find(f => f.id === currentFrameId)
@@ -11,7 +12,10 @@ const Frame = (props) => {
     return currentFrame ? currentFrame.saved : background ? background.saved : true
   }
 
-  const isCurrenFrameBackground = () => {
+  const cannotDestroyFrame = () => {
+    if (playing) {
+      return true
+    }
     return background ? currentFrameId === background.id : false
   }
 
@@ -21,7 +25,7 @@ const Frame = (props) => {
         Frame
       </div>
       <div className="submenu-actions">
-        <i className={`submenu-el fas fa-trash-alt ${ isCurrenFrameBackground() ? 'disabled' : ''}`} onPointerDown={() => destroyFrame(currentFrameId)} style={{}}></i>
+        <i className={`submenu-el fas fa-trash-alt ${ cannotDestroyFrame() ? 'disabled' : ''}`} onPointerDown={() => destroyFrame(currentFrameId)} style={{}}></i>
         <i className={`fas fa-save submenu-el ${isCurrentFrameSaved() ? 'disabled' : ''} `} onPointerDown={() => uploadFrame(currentFrameId)}></i>
       </div>
     </div>
@@ -31,7 +35,8 @@ const Frame = (props) => {
 const mapStateToProps = state => ({
   frames: getFrames(state),
   currentFrameId: getCurrentFrame(state),
-  background: getBackground(state)
+  background: getBackground(state),
+  playing: getPlaying(state)
 })
 
 const mapDispatchToProps = {
