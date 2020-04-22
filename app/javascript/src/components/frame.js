@@ -132,6 +132,7 @@ const Frame = (props) => {
 
   const handleMouseMove = (e) => {
     const { x, y } = getPenPos(canvas, e.clientX, e.clientY)
+
     if (action) {
       draw(x, y)
     }
@@ -139,7 +140,7 @@ const Frame = (props) => {
 
   const handleTouchMove = (e) => {
     const { x, y } = getPenPos(canvas, e.touches[0].clientX, e.touches[0].clientY)
-    if (action === 'draw') {
+    if (action === 'draw' || action === 'erase') {
       draw(x, y)
     } else if (action === 'brush') {
       console.log(e.touches[0].force)
@@ -166,9 +167,10 @@ const Frame = (props) => {
   }
 
   const draw = (drawX, drawY) => {
+    console.log('drawing')
     ctx.beginPath()
     ctx.moveTo(X, Y);
-    ctx.lineTo(drawX, drawY );
+    ctx.lineTo(drawX, drawY);
     ctx.lineWidth = lineWidth
     ctx.strokeStyle = color;
     ctx.lineCap = 'round';

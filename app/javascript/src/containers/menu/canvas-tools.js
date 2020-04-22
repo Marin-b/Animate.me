@@ -39,7 +39,7 @@ const CanvasTools = (props) => {
           </div>
           { isSliderOpen &&
             <div id="slider-dropdown">
-              <Slider orientation='vertical' trackSize={50} value={lineWidth ? lineWidth : 10} onChange={(e, v) => {setLineWidth(v)}} max={60} min={2}/>
+              <Slider orientation='vertical' value={lineWidth ? lineWidth : 10} onChange={(e, v) => {setLineWidth(v)}} max={60} min={2}/>
             </div>
           }
         </div>
