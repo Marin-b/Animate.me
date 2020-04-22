@@ -51,15 +51,14 @@ const Animation = (props) => {
     setExporting(true)
     setTimeout(() => {setExporting(false)}, frames.length * 1500)
   }
-
   return(
     <div className="submenu">
       <div className="submenu-header">
         Animation
       </div>
       <div className="submenu-actions">
-        <input type="number" className="submenu-el" style={{fontSize: '12px', width: '50px', textAlign: 'center'}} onChange={(e) => setFps(e.target.value)} defaultValue={fps}/>
-        <a href={`/animations/${animationId}/export?fps=${fps}`} onPointerDown={exportStarted} className={canExport() ? "submenu-el" : "submenu-el disabled"} download>
+        <input type="number" className="submenu-el" style={{fontSize: '12px', width: '50px', textAlign: 'center'}} onChange={(e) => setFps(e.target.value)} defaultValue={fps} />
+        <a href={`/animations/${animationId}/export?fps=${fps}`} download onClick={() => exportStarted()} onTouch={() => exportStarted()} className={canExport() ? "submenu-el" : "submenu-el disabled"} >
           <i className="fas fa-download submenu-el"></i>
         </a>
         <i className={playing ? "fas fa-pause-circle submenu-el" : "fas fa-play-circle submenu-el"} style={{ color: '#FF9B71' }} onPointerDown={toggleAnimation}></i>
