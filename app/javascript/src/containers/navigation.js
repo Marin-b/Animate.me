@@ -93,7 +93,7 @@ const Navigation = (props) => {
            </div>}
         </div>
         <div id="frames-wrapper" >
-          <div className="scroll-actions" onMouseDown={initScrollLeft} onMouseUp={stopScroll} onTouchStart={initScrollLeft} onTouchEnd={stopScroll}>
+          <div className="scroll-actions" onPointerDown={initScrollLeft} onPointerUp={stopScroll}>
             <i className="fas fa-chevron-left fa-2x"></i>
           </div>
           <div className="frames-container" ref={framesContainer}>
@@ -104,11 +104,11 @@ const Navigation = (props) => {
               </div>
             ))}
           </div>
-          <div className="scroll-actions" onMouseDown={initScrollRight} onMouseUp={stopScroll} onTouchStart={initScrollRight} onTouchEnd={stopScroll}>
+          <div className="scroll-actions" onPointerDown={initScrollRight} onPointerUp={stopScroll}>
             <i className="fas fa-chevron-right fa-2x"></i>
           </div>
         </div>
-        <div className="add-frame btn-primary" onClick={newFrame}>
+        <div className="add-frame btn-primary" onPointerDown={newFrame}>
           Add a Frame
         </div>
       </div>

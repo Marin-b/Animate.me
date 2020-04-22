@@ -1,6 +1,6 @@
-cqlaue option
 reorder
 copy previous
 import images
 =============
+major refacto of frame component for undo redo aka frame needs to move to containers and have its own canvas reducer for all the touch/mouse events. ctx needs to be available from the store
 undo redo
