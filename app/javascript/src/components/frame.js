@@ -129,6 +129,7 @@ const Frame = (props) => {
 
   const handleTouchMove = (e) => {
     if (drawing) {
+      console.log(e)
       const { x, y } = getPenPos(canvas, e.touches[0].clientX, e.touches[0].clientY)
       draw(x, y)
     }

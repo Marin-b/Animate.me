@@ -21,8 +21,8 @@ const Frame = (props) => {
         Frame
       </div>
       <div className="submenu-actions">
-        <i className={`submenu-el fas fa-trash-alt ${ isCurrenFrameBackground() ? 'disabled' : ''}`}onClick={() => destroyFrame(currentFrameId)} style={{}}></i>
-        <i className={`fas fa-save submenu-el ${isCurrentFrameSaved() ? 'disabled' : ''} `} onClick={() => uploadFrame(currentFrameId)}></i>
+        <i className={`submenu-el fas fa-trash-alt ${ isCurrenFrameBackground() ? 'disabled' : ''}`} onPointerDown={() => destroyFrame(currentFrameId)} style={{}}></i>
+        <i className={`fas fa-save submenu-el ${isCurrentFrameSaved() ? 'disabled' : ''} `} onPointerDown={() => uploadFrame(currentFrameId)}></i>
       </div>
     </div>
   )
